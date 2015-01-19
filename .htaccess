@@ -1,0 +1,12 @@
+RewriteEngine on
+RewriteRule ^([a-z0-9_-]+)\.html$ index.php/page/$1 [L]
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteCond $1 !^(index\.php|asset|robots\.txt)
+RewriteRule ^(.*)$ index.php/$1 [L]
+
+<FilesMatch "\.(ttf|otf|woff)$">
+<IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+</IfModule>
+</FilesMatch>
