@@ -4,7 +4,8 @@ class Api_model extends CI_Model {
 
     public function insert($table, $data) {
         $data['created_at'] = date('Y-m-d H:i:s');
-        return $this->db->insert($table, $data);
+        $this->db->insert($table, $data);
+        return $this->db->insert_id();;
     }
 
     public function read($table, $field_name, $field_value) {
@@ -20,6 +21,12 @@ class Api_model extends CI_Model {
         return $this->db->affected_rows();
     }
 
+    public function delete($table, $field_name, $field_value) {
+        $this->db->where($field_name, $field_value);
+        $this->db->delete($table);
+        return $this->db->affected_rows();
+    }
+    
     public function check_user_existance_by_email($table, $data) {
         $this->db->where('email', $data['email']);
         $query = $this->db->get($table);

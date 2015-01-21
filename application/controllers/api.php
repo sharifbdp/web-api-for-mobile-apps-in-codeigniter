@@ -31,9 +31,10 @@ class Api extends CI_Controller {
 
             $check_user = $this->Api_model->check_user_existance_by_email('registrations', $data);
             if ($check_user) {
-                $insert = $this->Api_model->insert('registrations', $data);
-                if ($insert) {
-                    echo strip_tags(json_encode(array('message' => 'success', 'user_details' => $data)));
+                $insert_ID = $this->Api_model->insert('registrations', $data);
+                if ($insert_ID) {
+                    $user_details = $this->Api_model->read('registrations', 'id', $insert_ID);
+                    echo strip_tags(json_encode(array('message' => 'success', 'user_details' => $user_details)));
                 } else {
                     echo strip_tags(json_encode(array('message' => 'failed')));
                 }
@@ -108,6 +109,21 @@ class Api extends CI_Controller {
             } else {
                 echo strip_tags(json_encode(array('message' => 'failed')));
             }
+        }
+    }
+
+    public function delete($id = NULL) {
+        $id = $this->input->get_post('id', TRUE);
+        if (empty($id)) {
+            echo strip_tags(json_encode(array('message' => 'id is required')));
+            exit();
+        }
+
+        $delete_status = $this->Api_model->delete('registrations', 'id', $id);
+        if ($delete_status) {
+            echo strip_tags(json_encode(array('message' => 'success')));
+        } else {
+            echo strip_tags(json_encode(array('message' => 'failed')));
         }
     }
 
